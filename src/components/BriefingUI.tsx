@@ -1,5 +1,12 @@
 import type { FieldDefinition } from '../content'
 
+export function StudioScene() {
+  return (
+    <div className="studio-scene scene-conversation" aria-hidden="true">
+      <div className="scene-frame" style={{ backgroundImage: 'url(/images/interview-young-adult.webp)' }} />
+    </div>
+  )
+}
 export function ArrowIcon({ back = false }: { back?: boolean }) {
   return <svg className={back ? 'arrow-icon back' : 'arrow-icon'} width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>
 }
@@ -12,7 +19,7 @@ export function Progress({ steps, activeStep, onNavigate }: {
   return (
     <nav className="progress-nav" aria-label="Etapas do briefing">
       <p className="mobile-progress">Etapa {activeStep + 1} de {steps.length} <span>{steps[activeStep].label}</span></p>
-      <ol className="progress-list grid grid-cols-5">
+      <ol className="progress-list">
         {steps.map((step, index) => (
           <li key={step.label} className={index === activeStep ? 'active' : index < activeStep ? 'previous' : ''}>
             <button className="progress-button" onClick={() => onNavigate(index)} aria-current={index === activeStep ? 'step' : undefined} aria-label={`Etapa ${index + 1}: ${step.label}`}>
