@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 88 108" role="img" aria-labelledby="title"><title id="title">Símbolo Projetaê</title>
+<defs><mask id="projetae-cut" maskUnits="userSpaceOnUse" x="-2" y="-2" width="90" height="110"><path d="M-2-2h90v110H-2z" fill="white"/><path d="M-.5 58C11 40 29 33 52 33" fill="none" stroke="black" stroke-width="3.5" stroke-linecap="round"/></mask></defs>
+<g id="projetae-symbol" mask="url(#projetae-cut)">
+  <path d="M9 0h34c23 0 41 17 41 36H49C28 36 10 44 0 59V10C0 4.5 4 0 9 0Z" fill="#B45336"/>
+  <path d="M84 36H49C27 36 10 44 0 61v36c0 6 7 8 12 5l10-8c4-3.5 6-7.5 6-13V68h20c20 0 35-13 36-32Z" fill="#292D2D"/>
+  <circle cx="42" cy="94" r="9" fill="#B45336"/>
+</g>
+</svg>

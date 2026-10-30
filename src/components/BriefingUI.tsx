@@ -2,8 +2,8 @@ import type { FieldDefinition } from '../content'
 
 export function StudioScene() {
   return (
-    <div className="studio-scene scene-conversation" aria-hidden="true">
-      <div className="scene-frame" style={{ backgroundImage: 'url(/images/interview-young-adult.webp)' }} />
+    <div className="studio-scene" aria-hidden="true">
+      <img className="scene-frame" src="/images/interview-young-adult.webp" alt="" draggable={false} />
     </div>
   )
 }
