@@ -1,8 +1,23 @@
-# Briefing Web — Etapa A
+![Projetaê — Sua ideia começa aqui.](docs/assets/projetae-cover.png)
 
-Interface visual de um briefing para projetos digitais, em React, TypeScript, Vite e Tailwind CSS. Paleta creme e grafite, componentes reutilizáveis, cinco etapas e layout responsivo.
+![React](https://img.shields.io/badge/React-292D2D?style=flat&logo=react&logoColor=61DAFB)
+![TypeScript](https://img.shields.io/badge/TypeScript-292D2D?style=flat&logo=typescript&logoColor=3178C6)
+![Vite](https://img.shields.io/badge/Vite-292D2D?style=flat&logo=vite&logoColor=646CFF)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-292D2D?style=flat&logo=tailwindcss&logoColor=06B6D4)
+
+🚧 **Projeto em desenvolvimento.**
+
+## Sobre o Projetaê
+
+O Projetaê é uma experiência para organizar ideias e conduzir uma solicitação de projeto digital por meio de um briefing guiado.
+
+O fluxo planejado é: **Landing → Briefing guiado → revisão → envio da solicitação → confirmação.**
+
+A Landing está concluída. O Briefing guiado é a próxima etapa de evolução; envio real, backend e persistência ainda não estão implementados.
 
 ## Executar localmente
+
+Com Node.js e npm instalados, execute na pasta do projeto:
 
 ```sh
 npm install
@@ -12,26 +27,17 @@ npm run dev
 ## Verificações
 
 ```sh
-npm run build
 npm run lint
+npm run build
 ```
 
-`npm run preview` permite conferir o build localmente.
-
-## Escopo
-
-- Boas-vindas, Seu negócio, Seu projeto, Estilo e materiais, Revisão e envio.
-- Navegação pelas etapas, campos ilustrativos e botão de envio desabilitado.
-- Os campos não têm validação definitiva. O conteúdo digitado é descartado ao mudar de etapa; a revisão apresenta somente a estrutura do briefing.
-- Nenhuma resposta é armazenada, transmitida ou enviada. Não há backend, banco, autenticação, uploads, e-mail, integrações ou publicação.
-- Animações CSS respeitam `prefers-reduced-motion`; navegação por teclado, rótulos e foco de título estão implementados.
-
-## Organização
-
-- `src/App.tsx`: composição das telas e estado da navegação.
-- `src/components/BriefingUI.tsx`: campos, progresso, aviso e ícone reutilizáveis.
-- `src/content.ts`: textos e configuração dos campos por etapa.
-- `src/index.css`: tokens visuais, componentes, responsividade e movimento.
-- `vite.config.ts`: plugins de React e Tailwind CSS.
-
-Etapas futuras dependem de escopo próprio. O envio real está indisponível nesta versão.
+<p align="center">
+  <img src="docs/assets/isaac-gabriel-avatar.png" alt="Isaac Gabriel" width="96" height="96">
+  <br>
+  <sub>Desenvolvido por</sub>
+  <br>
+  <strong>Isaac Gabriel</strong>
+  <br><br>
+  <a href="https://github.com/isaacgbr"><img src="https://img.shields.io/badge/GitHub-292D2D?style=flat&amp;logo=github&amp;logoColor=white" alt="GitHub de Isaac Gabriel" height="20"></a>
+  <a href="https://www.linkedin.com/in/isaacgbr"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&amp;logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0id2hpdGUiIGQ9Ik0yMC40NDcgMjAuNDUyaC0zLjU1NHYtNS41NjljMC0xLjMyOC0uMDI3LTMuMDM3LTEuODUyLTMuMDM3LTEuODUzIDAtMi4xMzYgMS40NDUtMi4xMzYgMi45Mzl2NS42NjdIOS4zNVY5aDMuNDE0djEuNTYxaC4wNDljLjQ3Ni0uOSAxLjYzNy0xLjg1IDMuMzctMS44NSAzLjYwMSAwIDQuMjY3IDIuMzcgNC4yNjcgNS40NTV2Ni4yODZaTTUuMzM3IDcuNDMzYTIuMDYyIDIuMDYyIDAgMSAxIDAtNC4xMjQgMi4wNjIgMi4wNjIgMCAwIDEgMCA0LjEyNFpNNy4xMTkgMjAuNDUySDMuNTU1VjloMy41NjR2MTEuNDUyWiIvPjwvc3ZnPg%3D%3D" alt="LinkedIn de Isaac Gabriel" height="20"></a>
+</p>

@@ -12,6 +12,14 @@ dist
 dist-ssr
 *.local
 
+# Local browser automation artifacts
+.playwright-mcp/
+
+# Local Codex reference documents (do not version)
+/AGENTS.md
+/docs/DESIGN_GUIDE.md
+/docs/DOCUMENTATION_GUIDE.md
+
 # Environment files and credentials
 .env
 .env.*
