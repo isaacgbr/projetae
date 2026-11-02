@@ -13,7 +13,7 @@ O Projetaê é uma experiência para organizar ideias e conduzir uma solicitaç�
 
 O fluxo planejado é: **Landing → Briefing guiado → revisão → envio da solicitação → confirmação.**
 
-A Landing está concluída. O Briefing guiado é a próxima etapa de evolução; envio real, backend e persistência ainda não estão implementados.
+A Landing está concluída. O Briefing funciona no frontend em cinco etapas: Contato, Seu projeto, Seu objetivo, Materiais e referências (opcional) e Revisão e envio. As respostas são validadas e preservadas em memória durante a navegação, com revisão e edição. Recarregar a página descarta os dados. Envio real, backend e persistência não estão implementados; o botão final permanece indisponível.
 
 ## Executar localmente
 
