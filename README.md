@@ -10,8 +10,6 @@
   <img src="https://img.shields.io/badge/Supabase-292D2D?style=flat&amp;logo=supabase&amp;logoColor=3FCF8E" alt="Supabase">
 </p>
 
-> 🚧 Projeto em desenvolvimento.
-
 ## Sobre
 
 O Projetaê organiza as informações essenciais de uma ideia antes do início de um projeto digital. Em vez de depender de mensagens dispersas, a pessoa percorre um briefing guiado, revisa suas respostas e envia uma solicitação estruturada para análise.
