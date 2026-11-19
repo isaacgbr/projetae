@@ -5,9 +5,12 @@ import { ArrowIcon } from './BriefingUI'
 import './Briefing.css'
 import { ProjectPreview } from './BriefingPreview'
 import MotionStation from '../features/submission/MotionStation'
+import { submitRequest } from '../services/submitRequest'
 
 export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean; onHome: () => void }) {
   const [showConfirmation, setShowConfirmation] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submissionError, setSubmissionError] = useState('')
   const [answers, setAnswers] = useState<Answers>(initialAnswers)
   const [active, setActive] = useState(0)
   const [unlocked, setUnlocked] = useState(0)
@@ -16,6 +19,7 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
   const heading = useRef<HTMLHeadingElement>(null)
   const stepMenu = useRef<HTMLDetailsElement>(null)
   const pendingErrorFocus = useRef(false)
+  const submitting = useRef(false)
   useEffect(() => {
     if (!pendingErrorFocus.current) return
     pendingErrorFocus.current = false
@@ -63,18 +67,31 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
     setErrors({})
     setActive(active + 1)
   }
-  function simulateSubmission() {
+  async function sendSubmission() {
+    if (submitting.current) return
     for (let index = 0; index < 4; index++) {
       const nextErrors = validateStep(index, answers)
       if (Object.keys(nextErrors).length) { showErrors(nextErrors, index); return }
     }
-    setShowConfirmation(true)
+    submitting.current = true
+    setIsSubmitting(true)
+    setSubmissionError('')
+    try {
+      await submitRequest(answers)
+      setShowConfirmation(true)
+    } catch (error) {
+      setSubmissionError(error instanceof Error ? error.message : 'Não foi possível enviar sua solicitação. Tente novamente.')
+    } finally {
+      submitting.current = false
+      setIsSubmitting(false)
+    }
   }
   function startNewBriefing() {
     setAnswers(initialAnswers)
     setUnlocked(0)
     setConfirmed([])
     setErrors({})
+    setSubmissionError('')
     setActive(0)
     setShowConfirmation(false)
   }
@@ -154,10 +171,11 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
         </div>
         <div className="navigation briefing-actions">
           <button type="button" className="button button-secondary" onClick={() => active === 0 ? onHome() : navigate(active - 1)}><ArrowIcon back /> Voltar</button>
-          {active < 4 ? <button type="submit" className="button button-primary">{active === 3 ? 'Ver revisão' : 'Continuar'} <ArrowIcon /></button> : <button type="button" className="button button-primary" onClick={simulateSubmission} aria-describedby="submission-notice">Enviar solicitação <ArrowIcon /></button>}
+          {active < 4 ? <button type="submit" className="button button-primary">{active === 3 ? 'Ver revisão' : 'Continuar'} <ArrowIcon /></button> : <button type="button" className="button button-primary" onClick={sendSubmission} disabled={isSubmitting} aria-describedby={submissionError ? 'submission-notice submission-error' : 'submission-notice'}>{isSubmitting ? 'Enviando...' : 'Enviar solicitação'} <ArrowIcon /></button>}
         </div>
       </form>
-      <p className="preview-notice" id="submission-notice">{active === 4 ? 'Protótipo visual: o envio será simulado. Nenhum dado será enviado.' : 'O envio real ainda não está disponível. Nenhuma solicitação será enviada.'}</p>
+      {submissionError && <p className="briefing-error-summary" id="submission-error" role="alert">{submissionError}</p>}
+      <p className="preview-notice" id="submission-notice">{active === 4 ? 'Sua solicitação será enviada ao Projetaê para análise.' : 'Suas respostas permanecem neste dispositivo até o envio.'}</p>
     </main>
     </>}
   </>

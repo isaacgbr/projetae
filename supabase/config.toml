@@ -1,0 +1,3 @@
+# O Briefing é público e não exige login. A tabela continua privada por RLS.
+[functions.submit-request]
+verify_jwt = false

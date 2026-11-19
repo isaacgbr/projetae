@@ -50,3 +50,6 @@ service_account*.json
 *.njsproj
 *.sln
 *.sw?
+
+# Arquivos temporários gerados pelo Supabase CLI
+supabase/.temp/
