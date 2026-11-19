@@ -9,11 +9,19 @@
 
 ## Sobre o Projetaê
 
-O Projetaê é uma experiência para organizar ideias e conduzir uma solicitação de projeto digital por meio de um briefing guiado.
+O Projetaê ajuda pessoas a transformar uma ideia em uma solicitação clara de projeto digital. O briefing guiado reúne objetivos, contatos e referências para facilitar o entendimento da proposta.
 
-O fluxo planejado é: **Landing → Briefing guiado → revisão → envio da solicitação → confirmação.**
+**Landing → Briefing guiado → revisão → envio da solicitação → confirmação.**
 
-A Landing está concluída. O Briefing funciona no frontend em cinco etapas: Contato, Seu projeto, Seu objetivo, Materiais e referências (opcional) e Revisão e envio. As respostas são validadas e preservadas em memória durante a navegação, com revisão e edição. Recarregar a página descarta os dados. Envio real, backend e persistência não estão implementados; o botão final permanece indisponível.
+O frontend oferece navegação em etapas, validação dos campos, revisão e edição das respostas, layout responsivo e uma experiência visual de envio com tratamento de falhas. As respostas permanecem em memória durante a navegação; recarregar a página descarta os dados.
+
+O produto possui integração real de envio. Este repositório é sua versão de portfólio: apresenta a experiência e uma amostra técnica do backend, omitindo componentes administrativos e configurações privadas. A execução local não inclui um serviço de envio configurado.
+
+## Arquitetura
+
+React e TypeScript organizam a interface, o estado do briefing e o cliente HTTP. Vite e Tailwind CSS compõem a base de desenvolvimento e estilos. O cliente envia as respostas a uma Edge Function, que valida a entrada antes de solicitar a persistência no Supabase e devolve uma confirmação ou um erro tratado.
+
+A [amostra de backend](supabase/functions/submit-request/README.md) inclui validações e testes isolados com dados fictícios. Configurações de implantação e migrations do produto não fazem parte desta versão.
 
 ## Executar localmente
 
@@ -29,6 +37,7 @@ npm run dev
 ```sh
 npm run lint
 npm run build
+node --test supabase/tests/submit-request.test.mjs
 ```
 
 <p align="center">

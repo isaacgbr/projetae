@@ -1,4 +1,4 @@
-// Contrato baseado em Answers (src/content.ts) e migrations/001_create_requests.sql.
+// Amostra de portfólio: contrato baseado em Answers (src/content.ts).
 // Sem imports do frontend: o bundle da Edge Function deve ser independente.
 const projects = [
   'Landing Page', 'Site Institucional', 'Catálogo Digital',
@@ -82,7 +82,7 @@ function validate(payload: unknown): { answers?: Answers; errors: Record<string,
     } catch { errors.link = 'Informe um link HTTP ou HTTPS válido, sem credenciais.' }
   }
   if (!directions.includes(answers.visualDirection)) errors.visualDirection = 'Escolha uma direção visual disponível.'
-  // A migration valida as cores mesmo quando outra direção está selecionada.
+  // Validar cores mesmo quando outra direção está selecionada.
   if (answers.customColors.some(color => !/^#[\da-f]{6}$/i.test(color))) errors.customColors = 'Informe até quatro cores hexadecimais válidas.'
   return Object.keys(errors).length ? { errors } : { answers, errors }
 }

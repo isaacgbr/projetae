@@ -163,13 +163,8 @@ test('erro do banco e erro de rede não retornam sucesso, dados internos ou segr
   }
 })
 
-test('contrato continua alinhado com campos do Briefing e colunas da migration', () => {
+test('contrato continua alinhado com os campos do Briefing', () => {
   const content = readFileSync(new URL('../../src/content.ts', import.meta.url), 'utf8')
-  const migration = readFileSync(new URL('../migrations/001_create_requests.sql', import.meta.url), 'utf8')
   const fields = [...content.match(/export type Answers = \{([^}]+)\}/)[1].matchAll(/(\w+):/g)].map(([, name]) => name)
   assert.deepEqual(Object.keys(valid).sort(), fields.sort())
-  for (const field of fields) {
-    const column = field.replace(/[A-Z]/g, char => '_' + char.toLowerCase())
-    assert(new RegExp(`^  ${column} text`, 'm').test(migration), `Coluna ausente: ${column}`)
-  }
 })
