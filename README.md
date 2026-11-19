@@ -7,7 +7,6 @@
   <img src="https://img.shields.io/badge/TypeScript-292D2D?style=flat&amp;logo=typescript&amp;logoColor=3178C6" alt="TypeScript">
   <img src="https://img.shields.io/badge/Vite-292D2D?style=flat&amp;logo=vite&amp;logoColor=646CFF" alt="Vite">
   <img src="https://img.shields.io/badge/Tailwind_CSS-292D2D?style=flat&amp;logo=tailwindcss&amp;logoColor=06B6D4" alt="Tailwind CSS">
-  <img src="https://img.shields.io/badge/Supabase-292D2D?style=flat&amp;logo=supabase&amp;logoColor=3FCF8E" alt="Supabase">
 </p>
 
 ## Sobre
@@ -20,10 +19,8 @@ O Projetaê organiza as informações essenciais de uma ideia antes do início d
 
 - Landing responsiva com identidade visual própria e navegação acessível.
 - Briefing em etapas com validação, progresso, revisão e edição das respostas.
-- Envio real por Edge Function, com validação independente no servidor.
-- Proteção básica contra abuso com Cloudflare Turnstile, honeypot e bloqueio de envios duplicados.
+- Fluxo de envio integrado, com Cloudflare Turnstile, honeypot e bloqueio de envios duplicados.
 - Estados de carregamento, erro, nova tentativa e confirmação animada.
-- Testes isolados do contrato HTTP com transporte e dados fictícios.
 
 ## Arquitetura
 
@@ -32,8 +29,6 @@ O Projetaê organiza as informações essenciais de uma ideia antes do início d
 | Interface | Landing, briefing, revisão e experiência de confirmação | React, TypeScript, CSS, Tailwind CSS |
 | Build e qualidade | Desenvolvimento, compilação e análise estática | Vite, TypeScript, Oxlint |
 | Integração | Cliente HTTP e tratamento dos estados de envio | Fetch API |
-| Backend demonstrativo | Validação, proteção antiabuso e persistência | Supabase Edge Functions, Deno, Turnstile |
-| Verificação | Casos de validação, segurança e falhas externas | Node.js Test Runner |
 
 ## Executar localmente
 
@@ -51,14 +46,9 @@ A execução local apresenta toda a experiência de interface, mas não inclui v
 ```sh
 npm run lint
 npm run build
-node --test supabase/tests/submit-request.test.mjs
 ```
 
-## Documentação
-
-A [amostra pública da Edge Function](supabase/functions/submit-request/README.md) descreve o contrato de envio, as validações e as proteções demonstradas pelo backend.
-
-Este repositório é a versão pública de portfólio do Projetaê. Componentes administrativos, configurações operacionais, migrations e dados do produto real permanecem privados.
+Este repositório é a versão pública de portfólio do Projetaê. Backend, componentes administrativos, configurações operacionais e dados do produto real permanecem privados.
 
 <p align="center">
   <img src="docs/assets/isaac-gabriel-avatar.png" alt="Isaac Gabriel" width="96" height="96">
