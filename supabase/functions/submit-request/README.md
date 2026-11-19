@@ -1,21 +1,31 @@
-# Amostra de backend — envio do Briefing
+# Edge Function — envio do Briefing
 
-Amostra técnica da Edge Function de envio do Projetaê, escrita em TypeScript com APIs nativas de Deno e Fetch. Demonstra validação de entrada, tratamento de erros e separação entre o contrato HTTP e a persistência.
+Amostra técnica do backend de envio do Projetaê, escrita em TypeScript para o runtime Deno. O código público demonstra o contrato HTTP e as proteções aplicadas antes da persistência, sem incluir configurações operacionais do produto real.
 
-## Contrato e responsabilidades
+## Responsabilidades
 
-Recebe um `POST` JSON com os campos do Briefing: contato, tipo de projeto, objetivos e referências opcionais. Exige pelo menos um contato válido, rejeita campos desconhecidos e limita tipos, formatos e tamanho do corpo.
+- aceitar somente requisições `POST` em JSON e limitar o tamanho do corpo;
+- validar tipos, formatos, campos permitidos e regras do Briefing no servidor;
+- restringir origens de navegador por CORS;
+- rejeitar o honeypot quando preenchido;
+- verificar o token do Cloudflare Turnstile, incluindo ação e hostname esperados;
+- persistir apenas os campos explicitamente permitidos;
+- devolver erros controlados sem expor respostas internas ou credenciais.
 
-`handler.ts` expõe `createHandler`, que recebe configuração e transporte HTTP por injeção. A configuração não contém valores do ambiente real neste repositório. `index.ts` é o adaptador para o runtime Deno; o serviço de persistência e sua implantação não são fornecidos nesta versão.
+O Turnstile e o honeypot oferecem proteção básica contra abuso. Eles complementam as validações do servidor, mas não substituem controles adicionais de segurança e observabilidade no ambiente real.
 
-A função só retorna `201` com `{"ok":true}` após a confirmação da gravação. Entradas inválidas recebem erros controlados; falhas de rede ou persistência não expõem respostas internas. CORS restringe origens de navegador, mas não substitui autenticação ou proteção contra abuso.
+## Organização
 
-## Testes isolados
+- `handler.ts`: validação, CORS, proteção antiabuso e contrato de persistência por injeção de dependência.
+- `index.ts`: adaptador mínimo para o runtime da Edge Function.
+- `../../tests/submit-request.test.mjs`: testes isolados com domínios, tokens e respostas fictícias.
 
-Com Node.js 24, na raiz do repositório:
+## Testes
+
+Na raiz do repositório:
 
 ```sh
 node --test supabase/tests/submit-request.test.mjs
 ```
 
-Os testes usam domínios de exemplo, valores fictícios e transporte simulado. Cobrem validação, limites, CORS, falhas de persistência e confirmação de envio, sem acessar rede ou banco real. A amostra não inclui migrations, dados de clientes ou instruções de produção.
+Os testes não acessam rede ou banco real. Configurações de implantação, migrations, dados e procedimentos de produção não fazem parte desta versão pública.

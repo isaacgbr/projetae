@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import './motion-station.css'
 
 const phases = [
@@ -46,7 +47,7 @@ export default function MotionStation({ onReplay }: { onReplay: () => void }) {
     else skip.current?.focus({ preventScroll: true })
   }, [complete])
 
-  return <main className="delivery-experience" data-phase={phase} aria-label="Envio da solicitação">
+  return createPortal(<main className="delivery-experience" data-phase={phase} aria-label="Envio da solicitação">
     <header className="delivery-brand"><img src="/brand/projetae-logo.svg" alt="Projetaê" width="174" height="54" /></header>
     <div className="delivery-stage" aria-hidden="true">
       <div className="delivery-parcel">
@@ -80,5 +81,5 @@ export default function MotionStation({ onReplay }: { onReplay: () => void }) {
       </div>
     </section>}
     {!complete && <button ref={skip} type="button" className="text-button delivery-skip" onClick={() => setStep(last)}>Pular animação</button>}
-  </main>
+  </main>, document.body)
 }

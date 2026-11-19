@@ -172,3 +172,8 @@ html:has(.page-shell.briefing), body:has(.page-shell.briefing) { background: #e8
   .briefing-actions .button { white-space: normal; }
   .preview-offer strong, .preview-company strong, .preview-portfolio strong { font-size: 21px; }
 }
+.briefing-honeypot { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; pointer-events:none; }
+.turnstile-container { width:100%; min-height:1px; margin-top:20px; }
+.submission-spinner { display:inline-block; width:16px; height:16px; flex-shrink:0; box-sizing:border-box; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:submission-spin 800ms linear infinite; }
+@keyframes submission-spin { to { transform:rotate(360deg); } }
+@media (prefers-reduced-motion:reduce) { .submission-spinner { animation:none; } }

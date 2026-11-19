@@ -2,7 +2,9 @@ import type { Answers } from '../content'
 
 const endpoint = import.meta.env.VITE_SUBMIT_REQUEST_URL
 
-export async function submitRequest(answers: Answers) {
+type SubmissionProtection = { turnstileToken: string; website: string }
+
+export async function submitRequest(answers: Answers, protection: SubmissionProtection) {
   if (!endpoint) {
     throw new Error('O envio ainda não está configurado neste ambiente.')
   }
@@ -12,7 +14,7 @@ export async function submitRequest(answers: Answers) {
     response = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(answers),
+      body: JSON.stringify({ ...answers, ...protection }),
     })
   } catch {
     throw new Error('Não foi possível conectar ao serviço de envio. Verifique sua conexão e tente novamente.')
@@ -30,6 +32,9 @@ export async function submitRequest(answers: Answers) {
   if (response.status === 422) {
     throw new Error('Algumas informações não foram aceitas. Revise o Briefing e tente novamente.')
   }
+  if (response.status === 403 && hasCode(result, 'verification_failed')) {
+    throw new Error('Não foi possível validar a verificação de segurança. Tente novamente.')
+  }
   if (response.status === 403) {
     throw new Error('O envio não está autorizado neste endereço. Entre em contato com o responsável pelo Projetaê.')
   }
@@ -44,4 +49,8 @@ export async function submitRequest(answers: Answers) {
 
 function isSuccess(result: unknown): result is { ok: true } {
   return !!result && typeof result === 'object' && 'ok' in result && result.ok === true
+}
+
+function hasCode(result: unknown, code: string) {
+  return !!result && typeof result === 'object' && 'code' in result && result.code === code
 }

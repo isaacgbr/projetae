@@ -6,11 +6,14 @@ import './Briefing.css'
 import { ProjectPreview } from './BriefingPreview'
 import MotionStation from '../features/submission/MotionStation'
 import { submitRequest } from '../services/submitRequest'
+import { Turnstile } from './Turnstile'
+import type { TurnstileHandle } from './Turnstile'
 
 export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean; onHome: () => void }) {
   const [showConfirmation, setShowConfirmation] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submissionError, setSubmissionError] = useState('')
+  const [website, setWebsite] = useState('')
   const [answers, setAnswers] = useState<Answers>(initialAnswers)
   const [active, setActive] = useState(0)
   const [unlocked, setUnlocked] = useState(0)
@@ -20,6 +23,7 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
   const stepMenu = useRef<HTMLDetailsElement>(null)
   const pendingErrorFocus = useRef(false)
   const submitting = useRef(false)
+  const turnstile = useRef<TurnstileHandle>(null)
   useEffect(() => {
     if (!pendingErrorFocus.current) return
     pendingErrorFocus.current = false
@@ -77,9 +81,13 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
     setIsSubmitting(true)
     setSubmissionError('')
     try {
-      await submitRequest(answers)
+      if (!turnstile.current) throw new Error('Não foi possível iniciar a verificação de segurança. Tente novamente.')
+      const turnstileToken = await turnstile.current.execute()
+      await submitRequest(answers, { turnstileToken, website })
       setShowConfirmation(true)
     } catch (error) {
+      turnstile.current?.reset()
+      setWebsite('')
       setSubmissionError(error instanceof Error ? error.message : 'Não foi possível enviar sua solicitação. Tente novamente.')
     } finally {
       submitting.current = false
@@ -92,6 +100,7 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
     setConfirmed([])
     setErrors({})
     setSubmissionError('')
+    setWebsite('')
     setActive(0)
     setShowConfirmation(false)
   }
@@ -167,11 +176,18 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
             <div className="field"><label htmlFor="link">Link de referência <span>(opcional)</span></label><p className="field-hint" id="link-hint">Pode ser um site, um perfil no Instagram ou uma inspiração no Pinterest ou Behance.</p><input className="field-control" type="url" id="link" placeholder="https://exemplo.com" value={answers.link} onChange={event => update('link', event.target.value)} {...errorProps('link')} aria-describedby={errors.link ? 'link-hint link-error' : 'link-hint'} />{errorMessage('link')}</div>
             <div className="field"><label htmlFor="notes">Observação <span>(opcional)</span></label><textarea className="field-control" id="notes" rows={4} placeholder="Conte sobre os materiais ou referências que você já tem." value={answers.notes} onChange={event => update('notes', event.target.value)} /></div>
           </>}
-          {active === 4 && <div className="briefing-review">{review.map((section, index) => section.values.length > 0 && <section key={section.title} aria-labelledby={`review-${index}`}><div className="briefing-review-heading"><h2 id={`review-${index}`}><span>{String(index + 1).padStart(2, '0')} — </span>{section.title}</h2><button className="text-button" type="button" onClick={() => navigate(index)} aria-label={`Editar ${section.title}`}>Editar <ArrowIcon /></button></div><ul className={index === 2 ? 'review-objectives' : ''}>{section.values.map((value, position) => <li key={position}>{value}</li>)}</ul>{index === 3 && answers.visualDirection === 'Personalizado' && <div className="review-colors" aria-label="Cores personalizadas">{answers.customColors.map((color, position) => <span key={position} style={{ backgroundColor: color }} role="img" aria-label={`Cor ${position + 1}: ${color}`} title={color} />)}</div>}</section>)}</div>}
+          {active === 4 && <>
+            <div className="briefing-review">{review.map((section, index) => section.values.length > 0 && <section key={section.title} aria-labelledby={`review-${index}`}><div className="briefing-review-heading"><h2 id={`review-${index}`}><span>{String(index + 1).padStart(2, '0')} — </span>{section.title}</h2><button className="text-button" type="button" onClick={() => navigate(index)} aria-label={`Editar ${section.title}`}>Editar <ArrowIcon /></button></div><ul className={index === 2 ? 'review-objectives' : ''}>{section.values.map((value, position) => <li key={position}>{value}</li>)}</ul>{index === 3 && answers.visualDirection === 'Personalizado' && <div className="review-colors" aria-label="Cores personalizadas">{answers.customColors.map((color, position) => <span key={position} style={{ backgroundColor: color }} role="img" aria-label={`Cor ${position + 1}: ${color}`} title={color} />)}</div>}</section>)}</div>
+            <div className="briefing-honeypot" aria-hidden="true">
+              <label htmlFor="company-website">Site da empresa</label>
+              <input id="company-website" name="companyWebsite" type="text" tabIndex={-1} autoComplete="off" value={website} onChange={event => setWebsite(event.target.value)} />
+            </div>
+            <Turnstile ref={turnstile} />
+          </>}
         </div>
         <div className="navigation briefing-actions">
           <button type="button" className="button button-secondary" onClick={() => active === 0 ? onHome() : navigate(active - 1)}><ArrowIcon back /> Voltar</button>
-          {active < 4 ? <button type="submit" className="button button-primary">{active === 3 ? 'Ver revisão' : 'Continuar'} <ArrowIcon /></button> : <button type="button" className="button button-primary" onClick={sendSubmission} disabled={isSubmitting} aria-describedby={submissionError ? 'submission-notice submission-error' : 'submission-notice'}>{isSubmitting ? 'Enviando...' : 'Enviar solicitação'} <ArrowIcon /></button>}
+          {active < 4 ? <button type="submit" className="button button-primary">{active === 3 ? 'Ver revisão' : 'Continuar'} <ArrowIcon /></button> : <button type="button" className="button button-primary" onClick={sendSubmission} disabled={isSubmitting} aria-busy={isSubmitting} aria-describedby={submissionError ? 'submission-notice submission-error' : 'submission-notice'}>{isSubmitting ? <><span className="submission-spinner" aria-hidden="true" /> Enviando...</> : <>Enviar solicitação <ArrowIcon /></>}</button>}
         </div>
       </form>
       {submissionError && <p className="briefing-error-summary" id="submission-error" role="alert">{submissionError}</p>}

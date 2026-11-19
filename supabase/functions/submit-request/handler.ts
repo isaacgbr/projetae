@@ -18,28 +18,32 @@ const textLimits = {
   otherObjective: 2000, link: 2048, notes: 8000, visualDirection: 80,
 }
 const maxBodyBytes = 32 * 1024
+const turnstileEndpoint = 'https://challenges.cloudflare.com/turnstile/v0/siteverify'
+const turnstileAction = 'submit_request'
 
 type Config = {
   supabaseUrl?: string
   serviceRoleKey?: string
   allowedOrigins?: string
+  turnstileSecretKey?: string
 }
 type Answers = Record<keyof typeof textLimits, string> & {
   objectives: string[]
   customColors: string[]
 }
+type Protection = { turnstileToken: string; website: string }
 
 function validDomain(domain: string) {
   return domain.length <= 253 && /^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]{2,59})$/i.test(domain)
 }
 
-function validate(payload: unknown): { answers?: Answers; errors: Record<string, string> } {
+function validate(payload: unknown): { answers?: Answers; protection?: Protection; errors: Record<string, string> } {
   const errors: Record<string, string> = {}
   if (!payload || typeof payload !== 'object' || Array.isArray(payload)) {
     return { errors: { body: 'Envie um objeto JSON com os campos do Briefing.' } }
   }
   const input = payload as Record<string, unknown>
-  const keys = [...Object.keys(textLimits), 'objectives', 'customColors']
+  const keys = [...Object.keys(textLimits), 'objectives', 'customColors', 'turnstileToken', 'website']
   if (Object.keys(input).some(key => !keys.includes(key))) {
     errors.body = 'O envio contém campos não permitidos.'
   }
@@ -58,6 +62,14 @@ function validate(payload: unknown): { answers?: Answers; errors: Record<string,
       errors[field] = `Informe uma lista de textos com até ${limit} itens.`
       answers[field] = []
     } else answers[field] = value
+  }
+  const turnstileToken = input.turnstileToken
+  const website = input.website === undefined ? '' : input.website
+  if (typeof turnstileToken !== 'string' || !turnstileToken || turnstileToken.length > 2048 || turnstileToken.includes('\u0000')) {
+    errors.turnstileToken = 'A verificação de segurança é obrigatória.'
+  }
+  if (typeof website !== 'string' || website.length > 200 || website.includes('\u0000')) {
+    errors.website = 'Campo de proteção inválido.'
   }
   if (Object.keys(errors).length) return { errors }
 
@@ -84,7 +96,29 @@ function validate(payload: unknown): { answers?: Answers; errors: Record<string,
   if (!directions.includes(answers.visualDirection)) errors.visualDirection = 'Escolha uma direção visual disponível.'
   // Validar cores mesmo quando outra direção está selecionada.
   if (answers.customColors.some(color => !/^#[\da-f]{6}$/i.test(color))) errors.customColors = 'Informe até quatro cores hexadecimais válidas.'
-  return Object.keys(errors).length ? { errors } : { answers, errors }
+  return Object.keys(errors).length
+    ? { errors }
+    : { answers, protection: { turnstileToken: turnstileToken as string, website: website as string }, errors }
+}
+
+type TurnstileResult = { success?: boolean; hostname?: string; action?: string }
+
+async function verifyTurnstile(token: string, secret: string, hostnames: Set<string>, send: typeof fetch) {
+  try {
+    const body = new URLSearchParams({ secret, response: token })
+    const response = await send(turnstileEndpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body,
+      signal: AbortSignal.timeout(10_000),
+      redirect: 'error',
+    })
+    if (!response.ok) return 'unavailable' as const
+    const result = await response.json() as TurnstileResult
+    return result.success === true && result.action === turnstileAction && typeof result.hostname === 'string' && hostnames.has(result.hostname)
+      ? 'valid' as const
+      : 'invalid' as const
+  } catch { return 'unavailable' as const }
 }
 
 class BodyTooLarge extends Error {}
@@ -152,8 +186,9 @@ export function createHandler(config: Config, send: typeof fetch = fetch) {
         ? json(413, { error: 'O envio excede o limite de 32 KiB.' })
         : json(400, { error: 'JSON inválido.' })
     }
-    const { answers, errors } = validate(payload)
-    if (!answers) return json(422, { error: 'Confira os campos do Briefing.', fields: errors })
+    const { answers, protection, errors } = validate(payload)
+    if (!answers || !protection) return json(422, { error: 'Confira os campos do Briefing.', fields: errors })
+    if (protection.website.trim()) return json(403, { error: 'Não foi possível validar o envio.', code: 'verification_failed' })
 
     let endpoint: URL
     try {
@@ -161,6 +196,12 @@ export function createHandler(config: Config, send: typeof fetch = fetch) {
       if (!['https:', 'http:'].includes(base.protocol) || base.username || base.password || !config.serviceRoleKey) throw new Error('Missing configuration')
       endpoint = new URL('/rest/v1/requests', base)
     } catch { return json(503, { error: 'Serviço temporariamente indisponível.' }) }
+
+    const hostnames = new Set(origins.map(value => new URL(value).hostname))
+    if (!config.turnstileSecretKey) return json(503, { error: 'Serviço temporariamente indisponível.' })
+    const verification = await verifyTurnstile(protection.turnstileToken, config.turnstileSecretKey, hostnames, send)
+    if (verification === 'invalid') return json(403, { error: 'Não foi possível validar o envio.', code: 'verification_failed' })
+    if (verification === 'unavailable') return json(502, { error: 'Não foi possível confirmar a verificação de segurança.' })
 
     // Lista explícita: id, created_at e status ficam a cargo dos defaults do banco.
     const row = {

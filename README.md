@@ -1,36 +1,52 @@
 ![Projetaê — Sua ideia começa aqui.](docs/assets/projetae-cover.png)
 
-![React](https://img.shields.io/badge/React-292D2D?style=flat&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-292D2D?style=flat&logo=typescript&logoColor=3178C6)
-![Vite](https://img.shields.io/badge/Vite-292D2D?style=flat&logo=vite&logoColor=646CFF)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-292D2D?style=flat&logo=tailwindcss&logoColor=06B6D4)
+<p align="center">Uma experiência guiada para transformar ideias em solicitações claras de projetos digitais.</p>
 
-🚧 **Projeto em desenvolvimento.**
+<p align="center">
+  <img src="https://img.shields.io/badge/React-292D2D?style=flat&amp;logo=react&amp;logoColor=61DAFB" alt="React">
+  <img src="https://img.shields.io/badge/TypeScript-292D2D?style=flat&amp;logo=typescript&amp;logoColor=3178C6" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Vite-292D2D?style=flat&amp;logo=vite&amp;logoColor=646CFF" alt="Vite">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-292D2D?style=flat&amp;logo=tailwindcss&amp;logoColor=06B6D4" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/Supabase-292D2D?style=flat&amp;logo=supabase&amp;logoColor=3FCF8E" alt="Supabase">
+</p>
 
-## Sobre o Projetaê
+> 🚧 Projeto em desenvolvimento.
 
-O Projetaê ajuda pessoas a transformar uma ideia em uma solicitação clara de projeto digital. O briefing guiado reúne objetivos, contatos e referências para facilitar o entendimento da proposta.
+## Sobre
 
-**Landing → Briefing guiado → revisão → envio da solicitação → confirmação.**
+O Projetaê organiza as informações essenciais de uma ideia antes do início de um projeto digital. Em vez de depender de mensagens dispersas, a pessoa percorre um briefing guiado, revisa suas respostas e envia uma solicitação estruturada para análise.
 
-O frontend oferece navegação em etapas, validação dos campos, revisão e edição das respostas, layout responsivo e uma experiência visual de envio com tratamento de falhas. As respostas permanecem em memória durante a navegação; recarregar a página descarta os dados.
+**Landing → Briefing → Revisão → Envio → Confirmação**
 
-O produto possui integração real de envio. Este repositório é sua versão de portfólio: apresenta a experiência e uma amostra técnica do backend, omitindo componentes administrativos e configurações privadas. A execução local não inclui um serviço de envio configurado.
+## Destaques
+
+- Landing responsiva com identidade visual própria e navegação acessível.
+- Briefing em etapas com validação, progresso, revisão e edição das respostas.
+- Envio real por Edge Function, com validação independente no servidor.
+- Proteção básica contra abuso com Cloudflare Turnstile, honeypot e bloqueio de envios duplicados.
+- Estados de carregamento, erro, nova tentativa e confirmação animada.
+- Testes isolados do contrato HTTP com transporte e dados fictícios.
 
 ## Arquitetura
 
-React e TypeScript organizam a interface, o estado do briefing e o cliente HTTP. Vite e Tailwind CSS compõem a base de desenvolvimento e estilos. O cliente envia as respostas a uma Edge Function, que valida a entrada antes de solicitar a persistência no Supabase e devolve uma confirmação ou um erro tratado.
-
-A [amostra de backend](supabase/functions/submit-request/README.md) inclui validações e testes isolados com dados fictícios. Configurações de implantação e migrations do produto não fazem parte desta versão.
+| Camada | Responsabilidade | Tecnologias |
+| --- | --- | --- |
+| Interface | Landing, briefing, revisão e experiência de confirmação | React, TypeScript, CSS, Tailwind CSS |
+| Build e qualidade | Desenvolvimento, compilação e análise estática | Vite, TypeScript, Oxlint |
+| Integração | Cliente HTTP e tratamento dos estados de envio | Fetch API |
+| Backend demonstrativo | Validação, proteção antiabuso e persistência | Supabase Edge Functions, Deno, Turnstile |
+| Verificação | Casos de validação, segurança e falhas externas | Node.js Test Runner |
 
 ## Executar localmente
 
-Com Node.js e npm instalados, execute na pasta do projeto:
+Com Node.js e npm instalados:
 
 ```sh
 npm install
 npm run dev
 ```
+
+A execução local apresenta toda a experiência de interface, mas não inclui valores nem serviços privados de produção.
 
 ## Verificações
 
@@ -39,6 +55,12 @@ npm run lint
 npm run build
 node --test supabase/tests/submit-request.test.mjs
 ```
+
+## Documentação
+
+A [amostra pública da Edge Function](supabase/functions/submit-request/README.md) descreve o contrato de envio, as validações e as proteções demonstradas pelo backend.
+
+Este repositório é a versão pública de portfólio do Projetaê. Componentes administrativos, configurações operacionais, migrations e dados do produto real permanecem privados.
 
 <p align="center">
   <img src="docs/assets/isaac-gabriel-avatar.png" alt="Isaac Gabriel" width="96" height="96">
