@@ -43,7 +43,16 @@ html:has(.delivery-experience) { overflow:hidden; scrollbar-gutter:auto; }
 .delivery-message { animation:delivery-appear 300ms ease 510ms both; }
 .delivery-message h1 { margin:24px 0 14px; font-size:clamp(27px,4vw,42px); letter-spacing:-.04em; font-weight:600; }
 .delivery-message p { max-width:45ch; margin:0 auto; font-size:16px; line-height:1.7; color:#625a52; }
-.delivery-replay { margin-top:25px; font-size:13px; min-height:44px; }
+.delivery-actions { display:flex; justify-content:center; flex-wrap:wrap; gap:12px; margin-top:28px; }
+.delivery-review { width:min(760px,calc(100% - 44px)); min-height:100dvh; box-sizing:border-box; margin:0 auto; padding:100px 0 64px; }
+.delivery-review-back { min-height:44px; margin-bottom:38px; }
+.delivery-review-label { margin:0 0 10px; color:#713a27; font-size:11px; letter-spacing:.12em; text-transform:uppercase; }
+.delivery-review h1 { margin:0; font-size:clamp(28px,4vw,42px); letter-spacing:-.04em; font-weight:600; }
+.delivery-review-intro { margin:14px 0 32px; color:#625a52; line-height:1.7; }
+.delivery-review dl { margin:0; }
+.delivery-review dl > div { padding:18px 0; border-bottom:1px solid #c9bfb3; }
+.delivery-review dt { margin-bottom:7px; color:#625a52; font-size:13px; }
+.delivery-review dd { margin:0; line-height:1.7; white-space:pre-wrap; overflow-wrap:anywhere; }
 .delivery-skip { position:absolute; right:24px; bottom:max(20px,env(safe-area-inset-bottom)); min-height:44px; }
 @keyframes report-enter { from { opacity:0; translate:0 8px; } to { opacity:1; translate:0 0; } }
 @keyframes report-write { from { transform:scaleX(0); } to { transform:scaleX(1); } }
@@ -52,7 +61,7 @@ html:has(.delivery-experience) { overflow:hidden; scrollbar-gutter:auto; }
 @keyframes envelope-dispatch { 0% { transform:translate(-50%,-50%); } 15% { transform:translate(calc(-50% - 7px),-50%); } 100% { transform:translate(calc(50vw + 20px),-50%) scale(.93); } }
 @keyframes delivery-seal { from { opacity:0; transform:scale(.94); } to { opacity:1; transform:scale(1); } }
 @keyframes delivery-appear { from { opacity:0; } to { opacity:1; } }
-@media(max-width:540px) { .delivery-brand img { width:151px; } .delivery-report { width:196px; height:246px; padding:19px; } .delivery-envelope { width:252px; height:160px; } .delivery-stamp { font-size:12px; right:15px; } .delivery-message p { font-size:15px; } }
+@media(max-width:540px) { .delivery-brand img { width:151px; } .delivery-report { width:196px; height:246px; padding:19px; } .delivery-envelope { width:252px; height:160px; } .delivery-stamp { font-size:12px; right:15px; } .delivery-message p { font-size:15px; } .delivery-actions { flex-direction:column; } .delivery-actions .button { width:100%; } .delivery-review { padding-top:76px; } .delivery-review-back { margin-top:48px; } }
 @media(max-height:620px) { .delivery-brand { top:4%; } .delivery-brand img { width:125px; } .delivery-report { scale:.78; } .delivery-success { padding-top:130px; } .delivery-caption { top:78%; } }
 @media(prefers-reduced-motion:reduce) { .delivery-experience * { animation-duration:0s!important; animation-delay:0s!important; transition-duration:0s!important; transition-delay:0s!important; } .delivery-check path,.report-check path { stroke-dashoffset:0; animation:none; } }
 .delivery-experience { --report-height:258px; --envelope-height:178px; --parcel-drop:calc(var(--report-height) / 2 + var(--envelope-height) / 2); --parcel-lift:-75px; }

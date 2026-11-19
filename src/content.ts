@@ -15,8 +15,8 @@ export const projectTypes = [
 export const objectives = ['Conseguir novos clientes', 'Apresentar meu negócio', 'Divulgar produtos ou serviços', 'Receber pedidos ou orçamentos', 'Fortalecer minha presença profissional', 'Outro']
 export const visualDirections = ['Minimalista', 'Elegante', 'Criativo', 'Escuro / Impactante', 'Não tenho preferência']
 export const projectUses = ['campanhas, serviços, lançamentos e captação de contatos.', 'apresentar seu negócio e reunir suas informações.', 'organizar uma coleção e facilitar a consulta.', 'valorizar trabalhos, experiência e trajetória profissional.']
-export type Answers = { phone: string; email: string; project: string; projectDescription: string; objectives: string[]; otherObjective: string; link: string; notes: string; visualDirection: string; customColors: string[] }
-export const initialAnswers: Answers = { phone: '', email: '', project: '', projectDescription: '', objectives: [], otherObjective: '', link: '', notes: '', visualDirection: '', customColors: [] }
+export type Answers = { name: string; phone: string; email: string; project: string; projectDescription: string; objectives: string[]; otherObjective: string; link: string; notes: string; visualDirection: string; customColors: string[] }
+export const initialAnswers: Answers = { name: '', phone: '', email: '', project: '', projectDescription: '', objectives: [], otherObjective: '', link: '', notes: '', visualDirection: '', customColors: [] }
 
 export function formatPhone(value: string) {
   let digits = value.replace(/\D/g, '')
@@ -31,7 +31,8 @@ export function formatPhone(value: string) {
 export function validateStep(step: number, answers: Answers): Record<string, string> {
   const errors: Record<string, string> = {}
   if (step === 0) {
-    const phone = answers.phone.trim(), email = answers.email.trim()
+    const name = answers.name.trim(), phone = answers.phone.trim(), email = answers.email.trim()
+    if (!name) errors.name = 'Digite seu nome para continuar.'
     if (!phone && !email) errors.contact = 'Informe um WhatsApp / telefone ou um e-mail válido para continuar.'
     const rawDigits = phone.replace(/\D/g, '')
     const digits = phone.startsWith('+55') ? rawDigits.slice(2) : rawDigits

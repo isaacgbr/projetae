@@ -11,6 +11,7 @@ import type { TurnstileHandle } from './Turnstile'
 
 export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean; onHome: () => void }) {
   const [showConfirmation, setShowConfirmation] = useState(false)
+  const [submittedAnswers, setSubmittedAnswers] = useState<Answers | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submissionError, setSubmissionError] = useState('')
   const [website, setWebsite] = useState('')
@@ -80,10 +81,12 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
     submitting.current = true
     setIsSubmitting(true)
     setSubmissionError('')
+    const submission = structuredClone(answers)
     try {
       if (!turnstile.current) throw new Error('Não foi possível iniciar a verificação de segurança. Tente novamente.')
       const turnstileToken = await turnstile.current.execute()
-      await submitRequest(answers, { turnstileToken, website })
+      await submitRequest(submission, { turnstileToken, website })
+      setSubmittedAnswers(submission)
       setShowConfirmation(true)
     } catch (error) {
       turnstile.current?.reset()
@@ -100,6 +103,7 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
     setConfirmed([])
     setErrors({})
     setSubmissionError('')
+    setSubmittedAnswers(null)
     setWebsite('')
     setActive(0)
     setShowConfirmation(false)
@@ -110,7 +114,7 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
   }
   const errorMessage = (key: string) => errors[key] ? <p className="briefing-error" role="alert" id={`${key}-error`}>{errors[key]}</p> : null
   const review = [
-    { title: 'Contato', values: [answers.phone.trim(), answers.email.trim()].filter(Boolean) },
+    { title: 'Contato', values: [answers.name.trim(), answers.phone.trim(), answers.email.trim()].filter(Boolean) },
     { title: 'Projeto', values: [answers.project, ...(answers.project === 'Ainda não sei qual escolher' ? [answers.projectDescription] : [])] },
     { title: 'Objetivos', values: [...answers.objectives.filter(item => item !== 'Outro'), ...(answers.objectives.includes('Outro') ? [`Outro: ${answers.otherObjective}`] : [])] },
     { title: 'Materiais e referências', values: [answers.link.trim(), answers.notes.trim(), answers.visualDirection && `Direção visual: ${answers.visualDirection}`].filter(Boolean) },
@@ -120,7 +124,7 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
       <a href="/" aria-label="Projetaê, início" onClick={event => { event.preventDefault(); onHome() }}><img src="/brand/projetae-logo.svg" alt="Projetaê — Sua ideia começa aqui." width="188" height="59" /></a>
       <button type="button" className="welcome-return" onClick={onHome}><ArrowIcon back /> Voltar ao início</button>
     </header>
-    {showConfirmation ? <MotionStation onReplay={startNewBriefing} /> : <>
+    {showConfirmation && submittedAnswers ? <MotionStation answers={submittedAnswers} onNew={startNewBriefing} /> : <>
     <nav className="briefing-progress" aria-label="Etapas do briefing">
       <div className="briefing-progress-top"><p className="briefing-position"><span>{String(active + 1).padStart(2, '0')} / 05</span> — {steps[active].label}</p>
       <details ref={stepMenu} onKeyDown={event => { if (event.key === 'Escape' && stepMenu.current) { stepMenu.current.open = false; stepMenu.current.querySelector('summary')?.focus() } }}><summary>Etapas</summary><ol>{steps.map((step, index) => <li key={step.label}>
@@ -138,6 +142,7 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
       <form noValidate onSubmit={event => { event.preventDefault(); if (active < 4) advance() }}>
         <div className="briefing-fields">
           {active === 0 && <>
+            <div className="field"><label htmlFor="name">Qual é o seu nome?</label><input className="field-control" id="name" name="name" type="text" autoComplete="name" placeholder="Seu nome" value={answers.name} onChange={event => update('name', event.target.value)} {...errorProps('name')} />{errorMessage('name')}</div>
             <div className="field"><label htmlFor="phone">WhatsApp / Telefone</label><input className="field-control" id="phone" name="phone" type="tel" autoComplete="tel" placeholder="(86) 99999-9999" value={answers.phone} onChange={event => {
               const input = event.currentTarget
               const digitsBefore = input.value.slice(0, input.selectionStart ?? input.value.length).replace(/\D/g, '').length

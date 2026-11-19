@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import type { Answers } from '../../content'
 import './motion-station.css'
 
 const phases = [
@@ -16,8 +17,9 @@ const phases = [
 const last = phases.length - 1
 const motionQuery = '(prefers-reduced-motion: reduce)'
 
-export default function MotionStation({ onReplay }: { onReplay: () => void }) {
+export default function MotionStation({ answers, onNew }: { answers: Answers; onNew: () => void }) {
   const [step, setStep] = useState(0)
+  const [view, setView] = useState<'confirmation' | 'review'>('confirmation')
   const heading = useRef<HTMLHeadingElement>(null)
   const skip = useRef<HTMLButtonElement>(null)
   const complete = step === last
@@ -41,7 +43,15 @@ export default function MotionStation({ onReplay }: { onReplay: () => void }) {
     }
     advance(0)
     return () => clearTimeout(timer)
-  }, [complete])
+  }, [complete, view])
+
+  const fields = [
+    ['Nome', answers.name], ['Telefone', answers.phone], ['E-mail', answers.email],
+    ['Projeto', answers.project], ['Descrição da ideia', answers.projectDescription],
+    ['Objetivos', answers.objectives.join('\n')], ['Outro objetivo', answers.otherObjective],
+    ['Link de referência', answers.link], ['Observações', answers.notes],
+    ['Preferência visual', answers.visualDirection], ['Cores personalizadas', answers.customColors.join(', ')],
+  ]
   useEffect(() => {
     if (complete) heading.current?.focus({ preventScroll: true })
     else skip.current?.focus({ preventScroll: true })
@@ -72,13 +82,23 @@ export default function MotionStation({ onReplay }: { onReplay: () => void }) {
       </div>
     </div>
     {!complete && <p className="delivery-caption" role="status">{phase === 'dispatching' || phase === 'dispatched' ? 'Enviando sua solicitação...' : 'Preparando sua solicitação...'}</p>}
-    {complete && <section className="delivery-success" aria-labelledby="delivery-title">
+    {complete && view === 'confirmation' && <section className="delivery-success" aria-labelledby="delivery-title">
       <svg className="delivery-check" viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="43" /><path d="m27 48 14 14 28-29" pathLength="1" /></svg>
       <div className="delivery-message">
         <h1 ref={heading} id="delivery-title" tabIndex={-1}>Solicitação enviada!</h1>
         <p>Recebi sua solicitação e vou analisar as informações do projeto. Entrarei em contato com você em breve.</p>
-        <button type="button" className="text-button delivery-replay" onClick={onReplay}>Rever demonstração</button>
+        <div className="delivery-actions">
+          <button type="button" className="button button-secondary" onClick={() => setView('review')}>Rever minha solicitação</button>
+          <button type="button" className="button button-primary" onClick={onNew}>Enviar nova solicitação</button>
+        </div>
       </div>
+    </section>}
+    {complete && view === 'review' && <section className="delivery-review" aria-labelledby="delivery-review-title">
+      <button type="button" className="text-button delivery-review-back" onClick={() => setView('confirmation')}>← Voltar para a confirmação</button>
+      <p className="delivery-review-label">Solicitação enviada</p>
+      <h1 ref={heading} id="delivery-review-title" tabIndex={-1}>Minha solicitação</h1>
+      <p className="delivery-review-intro">Estes são os dados enviados. Esta solicitação não pode mais ser alterada.</p>
+      <dl>{fields.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value || 'Não informado'}</dd></div>)}</dl>
     </section>}
     {!complete && <button ref={skip} type="button" className="text-button delivery-skip" onClick={() => setStep(last)}>Pular animação</button>}
   </main>, document.body)
