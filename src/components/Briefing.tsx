@@ -4,8 +4,10 @@ import type { Answers } from '../content'
 import { ArrowIcon } from './BriefingUI'
 import './Briefing.css'
 import { ProjectPreview } from './BriefingPreview'
+import MotionStation from '../features/submission/MotionStation'
 
 export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean; onHome: () => void }) {
+  const [showConfirmation, setShowConfirmation] = useState(false)
   const [answers, setAnswers] = useState<Answers>(initialAnswers)
   const [active, setActive] = useState(0)
   const [unlocked, setUnlocked] = useState(0)
@@ -23,6 +25,7 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
   }, [errors])
   const completed = steps.map((_, index) => confirmed.includes(index) && Object.keys(validateStep(index, answers)).length === 0)
   function onHome() {
+    setShowConfirmation(false)
     setActive(0)
     exitToLanding()
   }
@@ -60,6 +63,21 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
     setErrors({})
     setActive(active + 1)
   }
+  function simulateSubmission() {
+    for (let index = 0; index < 4; index++) {
+      const nextErrors = validateStep(index, answers)
+      if (Object.keys(nextErrors).length) { showErrors(nextErrors, index); return }
+    }
+    setShowConfirmation(true)
+  }
+  function startNewBriefing() {
+    setAnswers(initialAnswers)
+    setUnlocked(0)
+    setConfirmed([])
+    setErrors({})
+    setActive(0)
+    setShowConfirmation(false)
+  }
   function errorProps(key: string) {
     if (key === 'phone' && errors.contact) return { 'aria-invalid': true as const, 'aria-describedby': 'contact-error' }
     return { 'aria-invalid': errors[key] ? true as const : undefined, 'aria-describedby': errors[key] ? `${key}-error` : undefined }
@@ -76,6 +94,7 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
       <a href="/" aria-label="Projetaê, início" onClick={event => { event.preventDefault(); onHome() }}><img src="/brand/projetae-logo.svg" alt="Projetaê — Sua ideia começa aqui." width="188" height="59" /></a>
       <button type="button" className="welcome-return" onClick={onHome}><ArrowIcon back /> Voltar ao início</button>
     </header>
+    {showConfirmation ? <MotionStation onReplay={startNewBriefing} /> : <>
     <nav className="briefing-progress" aria-label="Etapas do briefing">
       <div className="briefing-progress-top"><p className="briefing-position"><span>{String(active + 1).padStart(2, '0')} / 05</span> — {steps[active].label}</p>
       <details ref={stepMenu} onKeyDown={event => { if (event.key === 'Escape' && stepMenu.current) { stepMenu.current.open = false; stepMenu.current.querySelector('summary')?.focus() } }}><summary>Etapas</summary><ol>{steps.map((step, index) => <li key={step.label}>
@@ -135,10 +154,11 @@ export function Briefing({ visible, onHome: exitToLanding }: { visible: boolean;
         </div>
         <div className="navigation briefing-actions">
           <button type="button" className="button button-secondary" onClick={() => active === 0 ? onHome() : navigate(active - 1)}><ArrowIcon back /> Voltar</button>
-          {active < 4 ? <button type="submit" className="button button-primary">{active === 3 ? 'Ver revisão' : 'Continuar'} <ArrowIcon /></button> : <button type="button" className="button button-primary" disabled aria-describedby="submission-notice">Envio indisponível <ArrowIcon /></button>}
+          {active < 4 ? <button type="submit" className="button button-primary">{active === 3 ? 'Ver revisão' : 'Continuar'} <ArrowIcon /></button> : <button type="button" className="button button-primary" onClick={simulateSubmission} aria-describedby="submission-notice">Enviar solicitação <ArrowIcon /></button>}
         </div>
       </form>
-      <p className="preview-notice" id="submission-notice">O envio ainda não está disponível. Nenhuma solicitação será enviada.</p>
+      <p className="preview-notice" id="submission-notice">{active === 4 ? 'Protótipo visual: o envio será simulado. Nenhum dado será enviado.' : 'O envio real ainda não está disponível. Nenhuma solicitação será enviada.'}</p>
     </main>
+    </>}
   </>
 }
