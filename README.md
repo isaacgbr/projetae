@@ -2,6 +2,8 @@
 
 <p align="center">Uma experiência guiada para transformar ideias em solicitações claras de projetos digitais.</p>
 
+<p align="center"><a href="https://projetae-web.vercel.app"><strong>Acessar o Projetaê</strong></a></p>
+
 <p align="center">
   <img src="https://img.shields.io/badge/React-292D2D?style=flat&amp;logo=react&amp;logoColor=61DAFB" alt="React">
   <img src="https://img.shields.io/badge/TypeScript-292D2D?style=flat&amp;logo=typescript&amp;logoColor=3178C6" alt="TypeScript">
@@ -18,17 +20,15 @@ O Projetaê organiza as informações essenciais de uma ideia antes do início d
 ## Destaques
 
 - Landing responsiva com identidade visual própria e navegação acessível.
-- Briefing em etapas com validação, progresso, revisão e edição das respostas.
+- Briefing em etapas com validação, progresso e revisão antes do envio.
 - Fluxo de envio integrado, com Cloudflare Turnstile, honeypot e bloqueio de envios duplicados.
-- Estados de carregamento, erro, nova tentativa e confirmação animada.
+- Estados de carregamento, erro, nova tentativa e confirmação animada com consulta somente leitura.
 
-## Arquitetura
+## Documentação
 
-| Camada | Responsabilidade | Tecnologias |
-| --- | --- | --- |
-| Interface | Landing, briefing, revisão e experiência de confirmação | React, TypeScript, CSS, Tailwind CSS |
-| Build e qualidade | Desenvolvimento, compilação e análise estática | Vite, TypeScript, Oxlint |
-| Integração | Cliente HTTP e tratamento dos estados de envio | Fetch API |
+- [Visão geral](docs/01-visao-geral.md)
+- [Arquitetura](docs/02-arquitetura.md)
+- [Decisões técnicas](docs/03-decisoes-tecnicas.md)
 
 ## Executar localmente
 
@@ -39,7 +39,7 @@ npm install
 npm run dev
 ```
 
-A execução local apresenta toda a experiência de interface, mas não inclui valores nem serviços privados de produção.
+A execução local apresenta a interface. O envio depende das integrações públicas configuradas no ambiente de execução.
 
 ## Verificações
 
@@ -48,7 +48,7 @@ npm run lint
 npm run build
 ```
 
-Este repositório é a versão pública de portfólio do Projetaê. Backend, componentes administrativos, configurações operacionais e dados do produto real permanecem privados.
+Este repositório é a versão pública de portfólio do Projetaê. Serviços e dados de produção não fazem parte deste código público.
 
 <p align="center">
   <img src="docs/assets/isaac-gabriel-avatar.png" alt="Isaac Gabriel" width="96" height="96">
