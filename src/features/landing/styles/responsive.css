@@ -1,0 +1,372 @@
+/* Estados exclusivos de dispositivos com hover preciso. */
+
+@media (hover: hover) and (pointer: fine) {
+  .landing-page .button-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px #633b2924;
+  }
+}
+
+/* Responsividade principal. */
+
+@media (max-width: 1100px) {
+  .landing-page .landing-container {
+    width: calc(100% - 64px);
+  }
+  .landing-page .landing-hero-description {
+    font-size: 16px;
+  }
+  .landing-page .desktop-nav {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 900px) and (min-width: 701px) {
+  .landing-page .landing-hero-copy {
+    width: 48%;
+  }
+  .landing-page .landing-hero h1 {
+    font-size: clamp(2.6rem, 5.7vw, 3.5rem);
+  }
+  .landing-page .studio-scene {
+    width: 50%;
+    inset-block: 17%;
+  }
+  .landing-page .service-stage {
+    aspect-ratio: 1.55;
+    padding-inline: 10%;
+  }
+}
+
+@media (max-width: 700px) {
+  .landing-page .landing-container {
+    width: calc(100% - 40px);
+  }
+  .landing-page .landing-header-inner {
+    min-height: 70px;
+    gap: 12px;
+  }
+  .landing-page .landing-header .brand-tagline {
+    white-space: nowrap;
+  }
+  .landing-page .landing-header .brand-name {
+    font-size: 28px;
+  }
+  .landing-page .landing-hero {
+    flex-direction: column;
+    justify-content: center;
+    min-height: calc(100svh - 70px);
+    padding-block: 24px;
+  }
+  .landing-page .landing-hero-copy {
+    width: 100%;
+    padding-block: 24px 16px;
+  }
+  .landing-page .landing-hero h1 {
+    font-size: clamp(2.7rem, 9vw, 3.75rem);
+  }
+  .landing-page .landing-hero-description {
+    font-size: 16px;
+    max-width: 38ch;
+    margin-top: 22px;
+  }
+  .landing-page .landing-hero-actions {
+    margin-top: 24px;
+  }
+  .landing-page .studio-scene {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1.4;
+    max-height: 360px;
+    margin: 0;
+    mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent);
+  }
+  .landing-page .landing-section {
+    padding-block: 64px;
+  }
+  .landing-page .section-intro h2 {
+    font-size: clamp(30px, 7.5vw, 38px);
+  }
+  .landing-page .process-intro {
+    display: block;
+  }
+  .landing-page .process-intro > p:not(.section-label) {
+    max-width: 33ch;
+    margin-top: 18px;
+    font-size: 14px;
+  }
+  .landing-page .process-flow {
+    margin-top: 36px;
+  }
+  .landing-page .process-list {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    margin: 0;
+  }
+  .landing-page .process-step {
+    min-height: 132px;
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 20px;
+    align-content: center;
+    text-align: left;
+    padding: 0;
+  }
+  .landing-page .process-visual {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    width: 132px;
+    height: 132px;
+    margin: 0;
+  }
+  .landing-page .note-mini {
+    gap: 11px;
+  }
+  .landing-page .checklist-mini {
+    gap: 6px;
+  }
+  .landing-page .checklist-mini b {
+    width: 14px;
+    height: 14px;
+    font-size: 10px;
+  }
+  .landing-page .request-sheet > i {
+    margin-top: 7px;
+  }
+  .landing-page .request-seal {
+    width: 26px;
+    height: 26px;
+    font-size: 12px;
+    top: -8px;
+    right: -8px;
+  }
+  .landing-page .process-caption {
+    justify-content: start;
+    align-self: end;
+    margin: 0;
+    gap: 8px;
+  }
+  .landing-page .process-step > p {
+    grid-column: 2;
+    margin: 7px 0 0;
+    font-size: 13px;
+  }
+  .landing-page .process-step h3 {
+    font-size: 21px;
+  }
+  .landing-page .process-track {
+    top: 66px;
+    bottom: 66px;
+    left: 66px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+  .landing-page .process-track::before, .landing-page .process-track::after {
+    display: none;
+  }
+  .landing-page .process-track > span {
+    top: 0;
+    left: -11px;
+  }
+  .landing-page[data-motion='ready'] .process-track > span {
+    animation-name: idea-travel-mobile;
+  }
+  @keyframes idea-travel-mobile {
+    0%, 12% {
+      transform: translateY(-14px) rotate(-8deg);
+      opacity: 0;
+    }
+    22% {
+      opacity: 1;
+    }
+    43%, 58% {
+      transform: translateY(146px) rotate(0);
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    92%, 100% {
+      transform: translateY(306px) rotate(5deg);
+      opacity: 0;
+    }
+  }
+  .landing-page .demo-note {
+    font-size: 14px;
+    margin-block: 12px 8px;
+  }
+  .landing-page .service-stage {
+    aspect-ratio: 1.42;
+    padding: 17px 7%;
+    perspective: 900px;
+  }
+  .landing-page .demo-rig {
+    --yaw: -9deg;
+  }
+  .landing-page .service-institutional .demo-rig, .landing-page .service-portfolio .demo-rig {
+    --yaw: 9deg;
+  }
+  .landing-page .demo-viewport {
+    --demo-view-height: max(68cqi, 204px);
+  }
+  .landing-page .demo-nav {
+    padding-block: 4cqi;
+  }
+  .landing-page .demo-nav b > span {
+    display: none;
+  }
+  .landing-page .institutional-scene-1 .demo-kicker {
+    display: none;
+  }
+  .landing-page .landing-viewport .demo-nav > span {
+    display: none;
+  }
+  .landing-page .demo-landing-cover {
+    grid-template-columns: 1.3fr 1fr;
+    padding-top: 3cqi;
+  }
+  .landing-page .demo-landing-copy strong {
+    font-size: 7.6cqi;
+  }
+  .landing-page .demo-landing-copy p {
+    font-size: 10px;
+  }
+  .landing-page .demo-landing-copy .demo-cta {
+    padding-inline: 2cqi;
+  }
+  .landing-page .demo-collection {
+    min-height: 44cqi;
+  }
+  .landing-page .other-projects {
+    max-width: 480px;
+    margin: 24px auto 0;
+  }
+  .landing-page .about-section {
+    padding-block: 56px 24px;
+  }
+  .landing-page .about-content {
+    gap: 32px;
+  }
+  .landing-page .about-layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .landing-page .about-responsible {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 20px;
+    align-items: end;
+  }
+  .landing-page .about-portrait {
+    grid-row: 1 / 3;
+    width: 92px;
+    height: 116px;
+    border-top-right-radius: 24px;
+  }
+  .landing-page .about-responsible h3 {
+    margin: 0;
+    font-size: 23px;
+    align-self: end;
+  }
+  .landing-page .about-responsible > p {
+    font-size: 13px;
+    align-self: start;
+  }
+  .landing-page .about-copy h2 {
+    font-size: clamp(36px, 8.3vw, 44px);
+  }
+  .landing-page .about-copy > .about-description {
+    font-size: 18px;
+    margin-top: 20px;
+    line-height: 1.7;
+  }
+  .landing-page .about-copy > .about-contact {
+    font-size: 15px;
+    line-height: 1.8;
+    margin-top: 22px;
+    padding-left: 16px;
+  }
+  .landing-page .about-closing {
+    padding-top: 4px;
+  }
+  .landing-page .brand-finale {
+    width: min(300px, 100%);
+  }
+  .landing-page .about-footer {
+    padding-top: 20px;
+  }
+  .landing-page .about-footer p {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 374px) {
+  .landing-page .landing-container {
+    width: calc(100% - 32px);
+  }
+  .landing-page .process-step {
+    column-gap: 12px;
+    grid-template-columns: 112px 1fr;
+  }
+  .landing-page .process-visual {
+    width: 112px;
+    height: 132px;
+  }
+  .landing-page .process-track {
+    left: 56px;
+  }
+  .landing-page .process-step h3 {
+    font-size: 19px;
+  }
+  .landing-page .demo-tabs {
+    gap: 2cqi;
+  }
+  .landing-page .demo-product-detail {
+    inset-block: 14cqi 4cqi;
+    padding: 3cqi;
+    gap: 3cqi;
+  }
+  .landing-page .demo-product-detail p {
+    margin-block: 2cqi;
+  }
+  .landing-page .demo-detail-link {
+    font-size: 9px;
+  }
+  .landing-page .institutional-scenes {
+    height: 47cqi;
+  }
+  .landing-page .institutional-foot {
+    padding-block: 3cqi;
+    font-size: 9px;
+  }
+  .landing-page .portfolio-scenes {
+    height: 43cqi;
+  }
+  .landing-page .portfolio-art {
+    height: 34cqi;
+  }
+  .landing-page .portfolio-caption, .landing-page .portfolio-index {
+    font-size: 9px;
+  }
+}
+
+/* Movimento reduzido preserva conteúdo e navegação. */
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page *, .landing-page *::before, .landing-page *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .landing-page .process-track > span {
+    display: none;
+  }
+  .landing-page .demo-rig::before, .landing-page .demo-rig::after, .landing-page .demo-bottom-edge {
+    display: none;
+  }
+}

@@ -1,0 +1,140 @@
+/* Os limites das cenas ficam estáveis; apenas o conteúdo acompanha o progresso da viewport. */
+
+.landing-page .landing-scene {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+}
+
+.landing-page .scene-content {
+  opacity: var(--scene-opacity, 1);
+  translate: 0 var(--scene-offset, 0px);
+  scale: var(--scene-scale, 1);
+}
+
+.landing-page .hero-scene-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: inherit;
+}
+
+.landing-page .landing-header {
+  animation: hero-enter 400ms var(--ease-out) both;
+  z-index: 10;
+}
+
+.landing-page .button-primary .arrow-icon {
+  transition: translate 220ms var(--ease-out);
+}
+
+.landing-page .button-primary:hover .arrow-icon {
+  translate: 2px 0;
+}
+
+.landing-page .process-flow {
+  --process-duration: 7600ms;
+  margin-top: clamp(52px, 7vh, 80px);
+}
+
+.landing-page .process-visual {
+  width: 216px;
+  height: 204px;
+}
+
+.landing-page .process-track {
+  top: 102px;
+}
+
+.landing-page .process-explanation {
+  max-width: 650px;
+  margin: clamp(40px, 6vh, 64px) auto 0;
+  padding-top: 24px;
+  border-top: 1px solid #8e796530;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.landing-page .process-explanation p:first-child {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -.025em;
+}
+
+.landing-page .process-explanation p + p {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.landing-page[data-motion='ready'] .request-seal {
+  animation: request-review var(--process-duration) ease-in-out infinite alternate;
+}
+
+@keyframes request-review {
+  0%, 65% {
+    opacity: .15;
+    scale: .9;
+  }
+  80%, 100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* Cada camada possui um único transform: posição → inclinação → suporte → demo. */
+
+.landing-page .project-tilt {
+  transform-style: preserve-3d;
+  transform: perspective(1200px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+  transition: transform 280ms var(--ease-out);
+}
+
+.landing-page .project-tilt[data-returning] {
+  transition: transform 620ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.landing-page .carousel-arrow {
+  transition: background-color 200ms, border-color 200ms, translate 200ms;
+}
+
+.landing-page .carousel-arrow:hover {
+  translate: 0 -1px;
+}
+
+.landing-page .carousel-pagination button:hover span {
+  background: #965136;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .landing-page .carousel-project[data-position='previous']:hover, .landing-page .carousel-project[data-position='next']:hover {
+    opacity: .8;
+  }
+  .landing-page .professional-contacts > a:hover {
+    color: #965136;
+  }
+}
+
+.landing-page .services-section .other-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 12px auto 0;
+  max-width: 60ch;
+  line-height: 1.65;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+.landing-page .other-projects strong {
+  font-size: 16px;
+  font-weight: 500;
+  color: #493f36;
+}
+
+.landing-page .other-projects > span {
+  font-size: 14px;
+}

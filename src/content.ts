@@ -1,5 +1,5 @@
 export const steps = [
-  { label: 'Contato', title: 'Como podemos entrar em contato com você?', subtitle: 'Preencha pelo menos uma das opções abaixo.' },
+  { label: 'Contato', title: 'Como podemos entrar em contato com você?', subtitle: 'Informe seu nome e pelo menos uma forma de contato.' },
   { label: 'Seu projeto', title: 'O que você gostaria de criar?', subtitle: 'Escolha o formato que combina com a sua ideia. Tudo bem se ainda não souber.' },
   { label: 'Seu objetivo', title: 'O que você quer alcançar com esse projeto?', subtitle: 'Você pode escolher mais de um objetivo.' },
   { label: 'Materiais e referências', title: 'Materiais e referências', subtitle: 'Se você já possui algo que possa ajudar a entender o projeto, pode adicionar aqui.' },

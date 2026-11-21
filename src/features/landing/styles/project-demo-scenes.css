@@ -1,0 +1,215 @@
+/* A mini Landing usa três seções reais com deslocamento constante por viewport. */
+
+.landing-page .demo-landing-home {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: var(--demo-view-height);
+}
+
+.landing-page .demo-collection, .landing-page .demo-landing-contact {
+  height: var(--demo-view-height);
+  min-height: 0;
+}
+
+.landing-page .demo-collection {
+  align-items: center;
+}
+
+.landing-page .demo-landing-contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3cqi;
+  padding: 6cqi;
+  background: #eee0c9;
+}
+
+.landing-page .demo-landing-contact strong {
+  font-family: Georgia, serif;
+  font-size: 8cqi;
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -.04em;
+}
+
+.landing-page .demo-landing-contact p {
+  margin: 0;
+  font-size: max(10px, 2.8cqi);
+  line-height: 1.6;
+}
+
+.landing-page .demo-landing-contact small {
+  margin-top: 2cqi;
+  font-size: max(9px, 2.4cqi);
+}
+
+.landing-page .demo-catalog[data-phase='1'] .product-1, .landing-page .demo-catalog[data-phase='1'] .product-2 {
+  opacity: .22;
+}
+
+.landing-page .demo-catalog[data-phase='2'] .demo-products {
+  opacity: .25;
+}
+
+.landing-page .demo-products {
+  transition: opacity 500ms;
+}
+
+.landing-page .portfolio-scenes {
+  height: 45cqi;
+  margin-top: 2cqi;
+}
+
+.landing-page .portfolio-presentation, .landing-page .portfolio-contact {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 2.5cqi;
+}
+
+.landing-page .portfolio-presentation > strong, .landing-page .portfolio-contact > strong {
+  font-size: 8cqi;
+  line-height: 1.05;
+  font-weight: 500;
+  letter-spacing: -.05em;
+}
+
+.landing-page .portfolio-presentation > p, .landing-page .portfolio-contact > p {
+  font-size: max(10px, 2.8cqi);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.landing-page .portfolio-presentation small, .landing-page .portfolio-contact small {
+  font-size: max(9px, 2.4cqi);
+  color: #d6d3bf;
+}
+
+.landing-page .portfolio-presentation-mark {
+  position: absolute;
+  right: 0;
+  bottom: 2cqi;
+  color: #e2b47e;
+  font-family: Georgia, serif;
+  font-size: 10cqi;
+}
+
+.landing-page .portfolio-contact-action {
+  padding-bottom: 1cqi;
+  border-bottom: 1px solid #e2b47e;
+  color: #efd2a1;
+  font-size: 4cqi;
+  margin-block: 2cqi;
+}
+
+.landing-page .portfolio-work .demo-portfolio-intro {
+  padding: 0 0 3cqi;
+}
+
+.landing-page .portfolio-work-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3cqi;
+}
+
+.landing-page .portfolio-work-grid .portfolio-art {
+  height: 29cqi;
+  padding: 3cqi;
+}
+
+.landing-page .portfolio-work-grid .portfolio-art strong {
+  font-size: 7cqi;
+}
+
+.landing-page .portfolio-work-grid .portfolio-type strong {
+  font-size: 22cqi;
+}
+
+.landing-page .portfolio-work-grid .poster-seal {
+  right: 3cqi;
+  top: 13cqi;
+  width: 9cqi;
+  height: 9cqi;
+  font-size: 5cqi;
+}
+
+.landing-page .portfolio-work-grid .portfolio-caption {
+  flex-direction: column;
+  gap: .5cqi;
+}
+
+@media (min-width: 701px) and (max-width: 900px) {
+  .landing-page .process-visual {
+    width: 180px;
+    height: 176px;
+  }
+  .landing-page .process-track {
+    top: 88px;
+  }
+}
+
+@media (max-width: 700px) {
+  .landing-page .hero-scene-content {
+    flex-direction: column;
+    min-height: 0;
+  }
+  .landing-page .landing-hero {
+    min-height: 0;
+  }
+  .landing-page .process-visual {
+    width: 132px;
+    height: 132px;
+  }
+  .landing-page .process-track {
+    top: 66px;
+  }
+  .landing-page .process-explanation {
+    margin-top: 32px;
+    text-align: left;
+  }
+  .landing-page .process-explanation p:first-child {
+    font-size: 19px;
+  }
+  .landing-page .process-explanation p + p {
+    font-size: 14px;
+  }
+  .landing-page .portfolio-scenes {
+    height: max(45cqi, 165px);
+  }
+}
+
+@media (max-width: 374px) {
+  .landing-page .process-visual {
+    width: 112px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page .scene-content {
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+  .landing-page .project-tilt {
+    transform: none;
+  }
+  .landing-page .button-primary .arrow-icon {
+    translate: none !important;
+  }
+}
+
+.landing-page .about-portrait > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.landing-page .professional-contacts > a:focus-visible {
+  outline: 2px solid #965136;
+  outline-offset: 4px;
+  border-radius: 2px;
+}

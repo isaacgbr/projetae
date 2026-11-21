@@ -4,10 +4,15 @@ const endpoint = import.meta.env.VITE_SUBMIT_REQUEST_URL
 
 type SubmissionProtection = { turnstileToken: string; website: string }
 
-export async function submitRequest(answers: Answers, protection: SubmissionProtection) {
+export async function submitRequest(answers: Answers, protection: SubmissionProtection, signal?: AbortSignal) {
   if (!endpoint) {
     throw new Error('O envio ainda não está configurado neste ambiente.')
   }
+
+  const requestSignal = signal
+    ? AbortSignal.any([signal, AbortSignal.timeout(30_000)])
+    : AbortSignal.timeout(30_000)
+  requestSignal.throwIfAborted()
 
   let response: Response
   try {
@@ -15,15 +20,20 @@ export async function submitRequest(answers: Answers, protection: SubmissionProt
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...answers, ...protection }),
+      signal: requestSignal,
     })
+    requestSignal.throwIfAborted()
   } catch {
+    if (requestSignal.aborted) throw new Error('O envio foi interrompido ou excedeu o tempo de espera. Suas respostas foram preservadas. Tente novamente.')
     throw new Error('Não foi possível conectar ao serviço de envio. Verifique sua conexão e tente novamente.')
   }
 
   let result: unknown
   try {
     result = await response.json()
+    requestSignal.throwIfAborted()
   } catch {
+    if (requestSignal.aborted) throw new Error('O envio foi interrompido ou excedeu o tempo de espera. Suas respostas foram preservadas. Tente novamente.')
     throw new Error('O serviço de envio retornou uma resposta inesperada. Tente novamente.')
   }
 

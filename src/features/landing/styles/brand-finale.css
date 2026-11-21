@@ -1,0 +1,248 @@
+/* Assets de marca limitados ao cabeçalho e à quarta cena. */
+
+.landing-page .landing-brand-link {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 54px;
+}
+
+.landing-page .landing-brand-logo {
+  display: block;
+  width: 188px;
+  height: auto;
+}
+
+@media (max-width: 700px) {
+  .landing-page .landing-brand-logo {
+    width: 166px;
+  }
+}
+
+@media (max-width: 374px) {
+  .landing-page .about-responsible {
+    grid-template-columns: 82px 1fr;
+    column-gap: 16px;
+  }
+  .landing-page .about-portrait {
+    width: 82px;
+    height: 108px;
+  }
+  .landing-page .about-responsible h3 {
+    font-size: 22px;
+  }
+  .landing-page .about-responsible > p {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-page .brand-finale .brand-part {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Variações sutis de luz distinguem as cenas sem alterar a paleta. */
+
+.landing-page .landing-section {
+  position: relative;
+}
+
+.landing-page .landing-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: max(32px, calc((100% - 80rem) / 2));
+  right: max(32px, calc((100% - 80rem) / 2));
+  height: 1px;
+  background: #8e79652b;
+  pointer-events: none;
+}
+
+.landing-page .how-section {
+  background: linear-gradient(180deg, #ebe5dc 0%, #e8e1d8 100%);
+}
+
+.landing-page .services-section {
+  background: radial-gradient(ellipse at 50% 40%, #ede6dc 0%, #e8e1d8 75%);
+}
+
+.landing-page .about-section {
+  min-height: 100svh;
+  background: linear-gradient(180deg, #e8e1d8, #e5dcd0);
+}
+
+.landing-page[data-document-hidden] .process-flow * {
+  animation-play-state: paused !important;
+}
+
+.landing-page .demo-benefit {
+  display: block;
+  margin-bottom: 2cqi;
+  font-size: max(9px, 2.2cqi);
+  line-height: 1.4;
+  color: #755a43;
+}
+
+.landing-page .demo-categories {
+  display: flex;
+  gap: 3cqi;
+  padding: 0 5cqi 3cqi;
+  font-size: max(9px, 2.5cqi);
+  line-height: 1.4;
+  color: #786652;
+}
+
+.landing-page .demo-categories > span {
+  padding-bottom: 1cqi;
+  border-bottom: 1px solid transparent;
+  transition: color 500ms, border-color 500ms;
+}
+
+.landing-page .demo-categories .active {
+  color: #743b25;
+  border-color: #a65d3f;
+}
+
+/* Identificação e encerramento formam uma única composição editorial. */
+
+.landing-page .about-layout {
+  grid-template-columns: .9fr 1.1fr;
+  gap: clamp(48px, 7vw, 100px);
+}
+
+.landing-page .about-content {
+  max-width: 1120px;
+  gap: clamp(40px, 6vh, 64px);
+}
+
+.landing-page .professional-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: 22px;
+}
+
+.landing-page .professional-contacts > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  color: #51483f;
+  font-size: 14px;
+  line-height: 1.5;
+  text-decoration: none;
+}
+
+.landing-page .professional-contacts svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.landing-page .about-ending {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding-top: 32px;
+  border-top: 1px solid #8e796540;
+}
+
+.landing-page .about-closing {
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.landing-page .brand-finale {
+  width: 304px;
+  max-width: 100%;
+}
+
+.landing-page .about-footer {
+  padding: 0;
+  border: 0;
+  text-align: right;
+}
+
+@media (max-width: 900px) and (min-width: 701px) {
+  .landing-page .professional-contacts {
+    gap: 14px;
+  }
+  .landing-page .professional-contacts > a {
+    gap: 5px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 700px) {
+  .landing-page .landing-hero {
+    min-height: calc(min(100svh, 58rem) - 70px);
+  }
+  .landing-page .landing-section {
+    min-height: 0;
+    padding-block: 52px;
+  }
+  .landing-page .landing-section::before {
+    left: 20px;
+    right: 20px;
+  }
+  .landing-page .about-section {
+    padding-bottom: 24px;
+  }
+  .landing-page .about-layout {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .landing-page .about-responsible {
+    grid-template-columns: 120px 1fr;
+  }
+  .landing-page .about-portrait {
+    width: 120px;
+    height: 160px;
+  }
+  .landing-page .professional-contacts {
+    grid-column: 1 / -1;
+    margin-top: 20px;
+    gap: 22px;
+  }
+  .landing-page .about-ending {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding-top: 26px;
+  }
+  .landing-page .brand-finale {
+    width: 250px;
+  }
+  .landing-page .about-footer {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+@media (max-width: 374px) {
+  .landing-page .about-responsible {
+    grid-template-columns: 104px 1fr;
+  }
+  .landing-page .about-portrait {
+    width: 104px;
+    height: 144px;
+  }
+  .landing-page .professional-contacts {
+    gap: 18px;
+  }
+}
+
+.landing-page .institutional-foot > span:last-child, .landing-page .portfolio-index > span:first-child {
+  transition: color 500ms, text-decoration-color 500ms;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+}

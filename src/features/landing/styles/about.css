@@ -1,0 +1,195 @@
+/* Apresentação e assinatura do criador. */
+
+.landing-page .about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 42px;
+}
+
+.landing-page .about-layout {
+  display: grid;
+  grid-template-columns: .8fr 1.2fr;
+  gap: clamp(64px, 9vw, 128px);
+  align-items: center;
+}
+
+.landing-page .about-responsible {
+  min-width: 0;
+}
+
+.landing-page .about-portrait {
+  position: relative;
+  width: 252px;
+  height: 321.6px;
+  border: 1px solid #a18b7545;
+  border-radius: 3px 36px 3px 3px;
+  background: #e3d9cc50;
+  overflow: hidden;
+}
+
+.landing-page .about-responsible h3 {
+  margin: 20px 0 0;
+  font-size: 32px;
+  font-weight: 550;
+  letter-spacing: -.035em;
+  line-height: 1.25;
+  color: var(--brand-graphite);
+}
+
+.landing-page .about-responsible > p {
+  max-width: 27ch;
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.landing-page .about-copy {
+  min-width: 0;
+}
+
+.landing-page .about-copy h2 {
+  font-size: clamp(36px, 3.7vw, 54px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -.055em;
+  color: var(--brand-graphite);
+}
+
+.landing-page .about-copy > .about-description {
+  max-width: 43ch;
+  font-size: 20px;
+  line-height: 1.7;
+  margin-top: 24px;
+  color: var(--brand-graphite);
+}
+
+.landing-page .about-copy > .about-contact {
+  max-width: 48ch;
+  font-size: 17px;
+  line-height: 1.8;
+  margin: 26px 0 0;
+  padding-left: 20px;
+  border-left: 2px solid #b4533660;
+  color: #625a52;
+}
+
+.landing-page .about-closing {
+  display: flex;
+  justify-content: center;
+  padding-top: 24px;
+}
+
+.landing-page .about-footer {
+  padding-top: 22px;
+  border-top: 1px solid #8e796535;
+  text-align: center;
+}
+
+.landing-page .about-footer p {
+  margin: 0;
+  color: #625a52;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.landing-page .brand-finale {
+  position: relative;
+  width: min(346px, 100%);
+  aspect-ratio: 346 / 108;
+}
+
+.landing-page .brand-part {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.landing-page .brand-part-symbol {
+  clip-path: inset(0 74.5% 0 0);
+}
+
+.landing-page .brand-part-word {
+  clip-path: inset(0 0 24% 27%);
+}
+
+.landing-page .brand-part-signature {
+  clip-path: inset(78% 0 0 27%);
+}
+
+.landing-page .brand-finale[data-brand-state='ready'] .brand-part {
+  opacity: 0;
+}
+
+.landing-page .brand-finale[data-brand-state='forming'] .brand-part-symbol {
+  animation: brand-symbol-form 550ms var(--ease-out) both;
+}
+
+.landing-page .brand-finale[data-brand-state='forming'] .brand-part-word {
+  animation: brand-word-form 700ms var(--ease-out) 200ms both;
+}
+
+.landing-page .brand-finale[data-brand-state='forming'] .brand-part-signature {
+  animation: brand-signature-form 500ms ease-out 650ms both;
+}
+
+@keyframes brand-symbol-form {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes brand-word-form {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+    clip-path: inset(0 72% 24% 27%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 24% 27%);
+  }
+}
+
+@keyframes brand-signature-form {
+  from {
+    opacity: 0;
+    transform: translateY(3px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Observadores controlam somente a atividade das animações; o conteúdo permanece no fluxo. */
+
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes scene-enter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

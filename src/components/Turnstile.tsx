@@ -4,6 +4,8 @@ const scriptId = 'cloudflare-turnstile-script'
 const scriptUrl = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
 const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY || ''
 const failureMessage = 'Não foi possível concluir a verificação de segurança. Tente novamente.'
+const scriptTimeoutMs = 15_000
+const verificationTimeoutMs = 60_000
 
 type TurnstileOptions = {
   sitekey: string
@@ -38,15 +40,25 @@ function loadTurnstile() {
   if (window.turnstile) return Promise.resolve(window.turnstile)
   if (scriptPromise) return scriptPromise
 
-  scriptPromise = new Promise<TurnstileApi>((resolve, reject) => {
+  const loading = new Promise<TurnstileApi>((resolve, reject) => {
     const existing = document.getElementById(scriptId) as HTMLScriptElement | null
     const script = existing ?? document.createElement('script')
-    const loaded = () => window.turnstile ? resolve(window.turnstile) : reject(new Error(failureMessage))
+    const cleanup = () => {
+      clearTimeout(timer)
+      script.removeEventListener('load', loaded)
+      script.removeEventListener('error', failed)
+    }
+    const loaded = () => {
+      if (!window.turnstile) { failed(); return }
+      cleanup()
+      resolve(window.turnstile)
+    }
     const failed = () => {
-      scriptPromise = null
-      if (!existing) script.remove()
+      cleanup()
+      script.remove()
       reject(new Error(failureMessage))
     }
+    const timer = setTimeout(failed, scriptTimeoutMs)
     script.addEventListener('load', loaded, { once: true })
     script.addEventListener('error', failed, { once: true })
     if (!existing) {
@@ -57,6 +69,8 @@ function loadTurnstile() {
       document.head.append(script)
     }
   })
+  // Libera tanto falhas quanto sucessos: a API global é a fonte após o load.
+  scriptPromise = loading.finally(() => { scriptPromise = null })
   return scriptPromise
 }
 
@@ -71,8 +85,18 @@ export const Turnstile = forwardRef<TurnstileHandle>(function Turnstile(_, ref) 
   const initializing = useRef<Promise<{ api: TurnstileApi; id: string }> | null>(null)
   const pending = useRef<{ resolve: (token: string) => void; reject: (error: Error) => void } | null>(null)
   const mounted = useRef(true)
+  const execution = useRef(0)
+  const verificationTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  function clearVerificationTimer() {
+    if (verificationTimer.current !== null) clearTimeout(verificationTimer.current)
+    verificationTimer.current = null
+  }
+
+  function invalidateExecution() { execution.current++ }
 
   function rejectPending() {
+    clearVerificationTimer()
     pending.current?.reject(new Error(failureMessage))
     pending.current = null
   }
@@ -95,6 +119,7 @@ export const Turnstile = forwardRef<TurnstileHandle>(function Turnstile(_, ref) 
         language: 'pt-BR',
         'response-field': false,
         callback: token => {
+          clearVerificationTimer()
           pending.current?.resolve(token)
           pending.current = null
         },
@@ -111,15 +136,23 @@ export const Turnstile = forwardRef<TurnstileHandle>(function Turnstile(_, ref) 
 
   useImperativeHandle(ref, () => ({
     async execute() {
+      const attempt = ++execution.current
       const current = await ensureWidget()
+      if (!mounted.current || attempt !== execution.current) throw new Error(failureMessage)
       rejectPending()
       current.api.reset(current.id)
       return new Promise<string>((resolve, reject) => {
         pending.current = { resolve, reject }
-        current.api.execute(current.id)
+        verificationTimer.current = setTimeout(() => {
+          rejectPending()
+          current.api.reset(current.id)
+        }, verificationTimeoutMs)
+        try { current.api.execute(current.id) }
+        catch { rejectPending() }
       })
     },
     reset() {
+      invalidateExecution()
       rejectPending()
       if (widget.current) widget.current.api.reset(widget.current.id)
     },
@@ -129,6 +162,7 @@ export const Turnstile = forwardRef<TurnstileHandle>(function Turnstile(_, ref) 
     mounted.current = true
     void ensureWidget().catch(() => undefined)
     return () => {
+      invalidateExecution()
       mounted.current = false
       rejectPending()
       if (widget.current) widget.current.api.remove(widget.current.id)

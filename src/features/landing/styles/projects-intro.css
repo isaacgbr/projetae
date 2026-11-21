@@ -1,0 +1,27 @@
+/* Seção de serviços. */
+
+.landing-page .services-section > .landing-container {
+  max-width: 80rem;
+}
+
+.landing-page .demo-note {
+  max-width: 66ch;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--muted);
+  margin: 12px 0 6px;
+  text-wrap: pretty;
+}
+
+.landing-page .other-projects {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 24px 0 0;
+}
+
+.landing-page .about-section {
+  --brand-graphite: #292d2d;
+  --brand-terracotta: #b45336;
+  border: 0;
+  padding-block: clamp(48px, 6vh, 72px) 24px;
+}
